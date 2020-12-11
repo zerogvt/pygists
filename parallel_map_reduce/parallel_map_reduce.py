@@ -9,7 +9,8 @@ def map_reduce(data,
     '''
     A map reduce implementation.
     The map phase is executed by a set of parallel subprocesses pool of size
-    'pool_size'. Throttling is supported via 'batch_size' and 'cool_secs'.
+    'pool_size' (typically set to equal the number of processing cores in your
+    system). Throttling is supported via 'batch_size' and 'cool_secs'.
     There will be 'cool_secs' of inactivity in between each batch of mappers
     start executing. The interface between mappers and the reducer are files.
     If 'indicator' is set there will be a . output in console for every data
@@ -21,10 +22,9 @@ def map_reduce(data,
     '''
     map_res = []
     ind = 0
-    batch = []
     with Pool(pool_size) as p:
         while ind < len(data):
-            batch.clear()
+            batch = []
             while len(batch) < batch_size and ind < len(data):
                 batch.append(data[ind])
                 ind += 1
